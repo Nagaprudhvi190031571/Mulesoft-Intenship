@@ -1,0 +1,37 @@
+package mypackage;
+import java.sql.*;
+public class Main {
+public static void main(String[] args) {
+try {
+Class.forName("oracle.jdbc.driver.OracleDriver");
+Connection con =DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+Statement s=con.createStatement();
+// Creation of table
+String st="Create table Movie"+"( name varchar(20),"+"actor varchar(20),"+"director varchar(20),"+
+"year_of_release varchar(20),"+"actress  varchar(20))";
+s.executeUpdate(st);
+PreparedStatement p=con.prepareStatement("insert into movie values(?,?,?,?,?)");
+p.setString(1, "Ironman");
+p.setString(2,"Robert Downey JR");
+p.setString(3,"Jon Favreau");
+p.setString(4, "1 May 2008");
+p.setString(5,"paltrow");
+int n=p.executeUpdate();
+
+//Selceting every movie form table movie
+PreparedStatement ps=con.prepareStatement("SELECT * from Movie");
+ResultSet rs=ps.executeQuery();
+while(rs.next()) {
+	System.out.println("Movie name:"+""+rs.getString(1)+ "\n"+"Actor name:"+ rs.getString(2) +
+			"\n"+"Director Name:"+ " "+ rs.getString(3)+
+			"\n"+"Year of release Date:"+" "+rs.getString(4)+
+			"\n"+"Actess name:"+ " "+ rs.getString(5));
+}
+
+
+}
+catch(Exception e) {
+	System.out.print(e);
+}
+}
+}
